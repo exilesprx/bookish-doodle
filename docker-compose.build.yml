@@ -1,0 +1,17 @@
+services:
+
+  source:
+    image: exilesprx/github-runner:source
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: source
+
+  runner:
+    image: exilesprx/github-runner:latest
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: runner
+      cache_from:
+        - exilesprx/github-runner:source

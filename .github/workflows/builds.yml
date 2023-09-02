@@ -1,0 +1,28 @@
+name: Docker Builds
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  builds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Image for source
+        run: |
+          docker compose -f docker-compose.build.yml build --pull source
+          docker compose -f docker-compose.build.yml push source
+
+      - name: Image for runner
+        run: |
+          docker compose -f docker-compose.build.yml build --pull runner
+          docker compose -f docker-compose.build.yml push runner

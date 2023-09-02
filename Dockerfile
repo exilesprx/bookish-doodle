@@ -1,4 +1,4 @@
-FROM debian:bookworm-20230814-slim
+FROM debian:bookworm-20230814-slim AS source
 
 RUN apt-get -y update \
   && apt-get -y install --no-install-recommends curl libdigest-sha-perl \
@@ -12,7 +12,7 @@ WORKDIR /opt/actions-runner
 
 RUN chown -R runner /opt/actions-runner
 
-
+# Commands below fail if running as root
 USER runner
 
 RUN curl -o actions-runner-linux-x64-2.308.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.308.0/actions-runner-linux-x64-2.308.0.tar.gz
@@ -24,6 +24,9 @@ RUN echo '9f994158d49c5af39f57a65bf1438cbae4968aec1e4fec132dd7992ad57c74fa  acti
 RUN tar xzf ./actions-runner-linux-x64-2.308.0.tar.gz
 
 
+FROM exilesprx/github-runner:source AS runner
+
+# Commands below fail if not running as root
 USER root
 
 RUN ./bin/installdependencies.sh
@@ -32,7 +35,7 @@ COPY entrypoint.sh /usr/lib/entrypoint.sh
 
 RUN chmod +x /usr/lib/entrypoint.sh
 
-
+# Runner should run as the runner user
 USER runner
 
 ENTRYPOINT [ "/usr/lib/entrypoint.sh" ]
