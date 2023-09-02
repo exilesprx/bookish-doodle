@@ -1,7 +1,7 @@
 FROM debian:bookworm-20230814-slim AS source
 
 RUN apt-get -y update \
-  && apt-get -y install --no-install-recommends curl libdigest-sha-perl \
+  && apt-get -y install --no-install-recommends curl libdigest-sha-perl ca-certificates \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
