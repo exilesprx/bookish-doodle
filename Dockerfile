@@ -1,1 +1,1 @@
-FROM debian:bookworm-20210816-slim
+FROM debian:bookworm-20230814-slim
