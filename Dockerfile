@@ -1,5 +1,7 @@
 FROM debian:bookworm-20230814-slim AS source
 
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
+
 RUN apt-get -y update \
   && apt-get -y install --no-install-recommends curl libdigest-sha-perl ca-certificates gnupg
 
@@ -11,7 +13,7 @@ RUN install -m 0755 -d /etc/apt/keyrings \
     tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 RUN apt-get -y update \
-  && apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+  && apt-get -y --no-install-recommends install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -27,8 +29,6 @@ RUN chown -R runner /opt/actions-runner
 USER runner
 
 RUN curl -o actions-runner-linux-x64-2.308.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.308.0/actions-runner-linux-x64-2.308.0.tar.gz
-
-SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 RUN echo '9f994158d49c5af39f57a65bf1438cbae4968aec1e4fec132dd7992ad57c74fa  actions-runner-linux-x64-2.308.0.tar.gz' | shasum -a 256 -c
 
