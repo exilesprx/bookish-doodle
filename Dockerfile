@@ -1,12 +1,23 @@
 FROM debian:bookworm-20230814-slim AS source
 
 RUN apt-get -y update \
-  && apt-get -y install --no-install-recommends curl libdigest-sha-perl ca-certificates \
+  && apt-get -y install --no-install-recommends curl libdigest-sha-perl ca-certificates gnupg
+
+RUN install -m 0755 -d /etc/apt/keyrings \
+  && curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+  && chmod a+r /etc/apt/keyrings/docker.gpg \
+  && echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+RUN apt-get -y update \
+  && apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r runner \
-  && useradd -r -g runner runner
+  && useradd -r -g runner runner \
+  && usermod -aG docker runner
 
 WORKDIR /opt/actions-runner
 
