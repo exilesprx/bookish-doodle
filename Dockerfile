@@ -34,13 +34,17 @@ RUN echo '9f994158d49c5af39f57a65bf1438cbae4968aec1e4fec132dd7992ad57c74fa  acti
 
 RUN tar xzf ./actions-runner-linux-x64-2.308.0.tar.gz
 
+USER root
+
+# Command below fail if not running as root
+RUN ./bin/installdependencies.sh
+
+USER runner
+
 
 FROM exilesprx/github-runner:source AS runner
 
-# Commands below fail if not running as root
 USER root
-
-RUN ./bin/installdependencies.sh
 
 COPY entrypoint.sh /usr/lib/entrypoint.sh
 
