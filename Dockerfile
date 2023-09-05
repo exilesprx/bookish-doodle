@@ -27,6 +27,8 @@ WORKDIR /opt/actions-runner
 
 FROM exilesprx/github-runner:source AS build
 
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
+
 # Commands below fail if running as root
 USER runner
 
