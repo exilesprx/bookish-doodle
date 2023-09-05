@@ -19,11 +19,13 @@ RUN apt-get -y update \
 
 RUN groupadd -r runner \
   && useradd -r -g runner runner \
-  && usermod -aG docker runner
+  && usermod -aG docker runner \
+  && chown -R runner /opt/actions-runner
 
 WORKDIR /opt/actions-runner
 
-RUN chown -R runner /opt/actions-runner
+
+FROM exilesprx/github-runner:source AS build
 
 # Commands below fail if running as root
 USER runner

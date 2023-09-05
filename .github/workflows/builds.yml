@@ -22,6 +22,11 @@ jobs:
           docker compose -f docker-compose.build.yml build --pull source
           docker compose -f docker-compose.build.yml push source
 
+      - name: Image for build
+        run: |
+          docker compose -f docker-compose.build.yml build --pull build
+          docker compose -f docker-compose.build.yml push build
+          
       - name: Image for runner
         run: |
           docker compose -f docker-compose.build.yml build --pull runner
