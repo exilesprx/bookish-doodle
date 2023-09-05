@@ -1,6 +1,7 @@
 ignored:
   - DL3008
   - DL4005
+  - SC1091
 
 trustedRegistries:
   - docker.io
