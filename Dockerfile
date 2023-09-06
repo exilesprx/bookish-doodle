@@ -47,7 +47,7 @@ RUN ./bin/installdependencies.sh
 USER runner
 
 
-FROM exilesprx/github-runner:source AS runner
+FROM exilesprx/github-runner:build AS runner
 
 USER root
 
