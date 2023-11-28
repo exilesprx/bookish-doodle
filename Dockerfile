@@ -1,4 +1,4 @@
-FROM debian:bookworm-20231030-slim AS source
+FROM debian:bookworm-20231120-slim AS source
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
