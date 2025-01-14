@@ -1,4 +1,4 @@
-FROM debian:bookworm-20241223-slim AS source
+FROM debian:bookworm-20250113-slim AS source
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 RUN apt-get -y update \
   && apt-get -y install --no-install-recommends \
