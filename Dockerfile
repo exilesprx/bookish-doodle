@@ -27,18 +27,18 @@ RUN apt-get -y update \
 FROM exilesprx/github-runner:source AS build
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 # Commands below fail if running as root
-RUN groupadd -r runner \
-  && useradd -r -g runner runner \
+RUN groupadd runner \
+  && useradd -u 1000 -g runner runner \
   && usermod -aG docker runner
-USER runner
+USER 1000
 WORKDIR /opt/actions-runner
 RUN curl -o actions-runner-linux-x64-2.308.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.308.0/actions-runner-linux-x64-2.308.0.tar.gz \
   && echo '9f994158d49c5af39f57a65bf1438cbae4968aec1e4fec132dd7992ad57c74fa  actions-runner-linux-x64-2.308.0.tar.gz' | shasum -a 256 -c \
   && tar -xzf ./actions-runner-linux-x64-2.308.0.tar.gz
-USER root
+USER 0
 # Command below fail if not running as root
 RUN ./bin/installdependencies.sh
-USER runner
+USER 1000
 
 
 FROM exilesprx/github-runner:build AS runner
